@@ -3,7 +3,7 @@
 function unit_test() {
     local input=$1
     local expected=$2
-    echo "$input" | go run main.go > a.s
+    echo "$input" | ruby main.rb > a.s
     gcc a.s
     ./a.out
     local actual=$?
