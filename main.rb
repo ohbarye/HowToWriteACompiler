@@ -44,6 +44,9 @@ def tokenize
       intliteral = read_number(char)
       token = Token.new("intliteral", intliteral)
       tokens << token
+    when ';'
+      token = Token.new("punct", char)
+      tokens << token
     else
       throw "tokenizer: Invalid char: '#{char}'"
     end
