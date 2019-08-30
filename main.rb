@@ -45,7 +45,7 @@ def tokenize
       tokens << token
       puts "# '#{token.value}'"
     else
-      throw StandardError("tokenizer: Invalid char: '#{char}'")
+      throw "tokenizer: Invalid char: '#{char}'"
     end
   end
 
