@@ -4,7 +4,7 @@
 @token_index = 0
 
 Token = Struct.new(:kind, :value)
-Expr = Struct.new(:kind, :intval)
+Expr = Struct.new(:kind, :intval, :operator, :operand)
 
 def get_token
   return if @token_index == @tokens.size
@@ -54,7 +54,7 @@ def tokenize
       intliteral = read_number(char)
       token = Token.new("intliteral", intliteral)
       tokens << token
-    when ';'
+    when ';', '+', '-'
       token = Token.new("punct", char)
       tokens << token
     else
@@ -69,7 +69,16 @@ end
 
 def parse_unary_expr
   token = get_token
-  Expr.new('intliteral', token.value)
+  case token.kind
+  when 'intliteral'
+    Expr.new('intliteral', token.value, nil, nil)
+  when 'punct'
+    operator = token.value
+    operand = parse_unary_expr
+    Expr.new('unary', nil, operator, operand)
+  else
+    nil
+  end
 end
 
 def parse
@@ -77,7 +86,21 @@ def parse
 end
 
 def generate_expr(expr)
-  puts "  movq $#{expr.intval}, %rax"
+  case expr.kind
+  when 'intliteral'
+    puts "  movq $#{expr.intval}, %rax"
+  when 'unary'
+    case expr.operator
+    when '-'
+      puts "  movq $-#{expr.operand.intval}, %rax"
+    when '+'
+      puts "  movq $#{expr.operand.intval}, %rax"
+    else
+      throw "generator: Unknown unary operator: #{expr.operator}"
+    end
+  else
+    throw "generator: Unknown expr.kind: #{expr.kind}"
+  end
 end
 
 def generate_code(expr)
