@@ -65,7 +65,7 @@ def tokenize
       intliteral = read_number(char)
       token = Token.new("intliteral", intliteral)
       tokens << token
-    when ';', '+', '-'
+    when ';', '+', '-', '*'
       token = Token.new("punct", char)
       tokens << token
     else
@@ -99,7 +99,7 @@ def parse
     return expr if token.nil? || token.value == ';'
 
     case token.value
-    when '+', '-'
+    when '+', '-', '*'
       left = expr
       right = parse_unary_expr
       return Expr.new('binary', nil, token.value, nil, left, right)
@@ -131,6 +131,8 @@ def generate_expr(expr)
       puts "  addq %rcx, %rax"
     when '-'
       puts "  subq %rcx, %rax"
+    when '*'
+      puts "  imulq %rcx, %rax"
     else
       throw "generator: Unknown binary operator: #{expr.operator}"
     end
