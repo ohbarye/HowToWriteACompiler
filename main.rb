@@ -68,10 +68,14 @@ def parse
   parse_unary_expr
 end
 
-def generate(expr)
+def generate_expr(expr)
+  puts "  movq $#{expr.intval}, %rax"
+end
+
+def generate_code(expr)
   puts "  .global main"
   puts "main:"
-  puts "  movq $#{expr.intval}, %rax"
+  generate_expr(expr)
   puts "  ret"
 end
 
@@ -79,7 +83,7 @@ def main
   @source = gets
   @tokens = tokenize
   expr = parse
-  generate(expr)
+  generate_code(expr)
 end
 
 main
