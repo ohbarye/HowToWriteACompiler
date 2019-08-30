@@ -2,6 +2,7 @@
 @source_index = 0
 
 Token = Struct.new(:kind, :value)
+Expr = Struct.new(:kind, :intval)
 
 def get_char
   return if @source_index == @source.size
@@ -61,9 +62,11 @@ def main
   @source = gets
   tokens = tokenize
   first_token = tokens.first
+  expr = Expr.new('intliteral', first_token.value)
+
   puts "  .global main"
   puts "main:"
-  puts "  movq $#{first_token.value}, %rax"
+  puts "  movq $#{expr.intval}, %rax"
   puts "  ret"
 end
 
