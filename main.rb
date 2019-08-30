@@ -39,6 +39,8 @@ def tokenize
     char = get_char
     break if char.nil?
     case char
+    when ' ', "\t", "\n"
+      # noop
     when '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
       intliteral = read_number(char)
       token = Token.new("intliteral", intliteral)
