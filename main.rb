@@ -3,8 +3,17 @@
 @tokens = []
 @token_index = 0
 
-Token = Struct.new(:kind, :value)
-Expr = Struct.new(:kind, :intval, :operator, :operand)
+Token = Struct.new(
+    :kind,  # "intliteral", "punct"
+    :value,
+)
+
+Expr = Struct.new(
+    :kind,     # "intliteral", "unary"
+    :intval,   # for intliteral
+    :operator, # "-", "+"
+    :operand,  # for unary
+)
 
 def get_token
   return if @token_index == @tokens.size
