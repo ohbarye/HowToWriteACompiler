@@ -1,6 +1,8 @@
 source = ''
 source_index = 0
 
+Token = Struct.new(:kind, :value)
+
 def get_char
   return if source_index == source.size
   char = source[source_index]
