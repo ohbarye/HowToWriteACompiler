@@ -59,16 +59,27 @@ def tokenize
   tokens
 end
 
-def main
-  @source = gets
-  @tokens = tokenize
-  first_token = tokens.first
-  expr = Expr.new('intliteral', first_token.value)
+def parse_unary_expr
+  first_token = @tokens.first
+  Expr.new('intliteral', first_token.value)
+end
 
+def parse
+  parse_unary_expr
+end
+
+def generate(expr)
   puts "  .global main"
   puts "main:"
   puts "  movq $#{expr.intval}, %rax"
   puts "  ret"
+end
+
+def main
+  @source = gets
+  @tokens = tokenize
+  expr = parse
+  generate(expr)
 end
 
 main
