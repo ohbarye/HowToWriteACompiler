@@ -1,9 +1,17 @@
 @source = ''
 @source_index = 0
 @tokens = []
+@token_index = 0
 
 Token = Struct.new(:kind, :value)
 Expr = Struct.new(:kind, :intval)
+
+def get_token
+  return if @token_index == @tokens.size
+  token = @tokens[@token_index]
+  @token_index += 1
+  token
+end
 
 def get_char
   return if @source_index == @source.size
@@ -60,8 +68,8 @@ def tokenize
 end
 
 def parse_unary_expr
-  first_token = @tokens.first
-  Expr.new('intliteral', first_token.value)
+  token = get_token
+  Expr.new('intliteral', token.value)
 end
 
 def parse
