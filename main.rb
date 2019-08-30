@@ -9,10 +9,12 @@ Token = Struct.new(
 )
 
 Expr = Struct.new(
-    :kind,     # "intliteral", "unary"
+    :kind,     # "intliteral", "unary", "binary"
     :intval,   # for intliteral
     :operator, # "-", "+"
     :operand,  # for unary
+    :left,     # for binary
+    :right,    # for binary
 )
 
 def get_token
@@ -91,7 +93,20 @@ def parse_unary_expr
 end
 
 def parse
-  parse_unary_expr
+  expr = parse_unary_expr
+  while true
+    token = get_token
+    return expr if token.nil? || token.value == ';'
+
+    case token.value
+    when '+', '-'
+      left = expr
+      right = parse_unary_expr
+      return Expr.new('binary', nil, token.value, nil, left, right)
+    else
+      return expr
+    end
+  end
 end
 
 def generate_expr(expr)
@@ -106,6 +121,18 @@ def generate_expr(expr)
       puts "  movq $#{expr.operand.intval}, %rax"
     else
       throw "generator: Unknown unary operator: #{expr.operator}"
+    end
+  when 'binary'
+    puts "  movq $#{expr.left.intval}, %rax"
+    puts "  movq $#{expr.right.intval}, %rcx"
+
+    case expr.operator
+    when '+'
+      puts "  addq %rcx, %rax"
+    when '-'
+      puts "  subq %rcx, %rax"
+    else
+      throw "generator: Unknown binary operator: #{expr.operator}"
     end
   else
     throw "generator: Unknown expr.kind: #{expr.kind}"
