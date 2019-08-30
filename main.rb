@@ -33,7 +33,6 @@ end
 
 def tokenize
   tokens = []
-  puts "# Tokens : "
 
   while true
     char = get_char
@@ -45,12 +44,12 @@ def tokenize
       intliteral = read_number(char)
       token = Token.new("intliteral", intliteral)
       tokens << token
-      puts "# '#{token.value}'"
     else
       throw "tokenizer: Invalid char: '#{char}'"
     end
   end
 
+  puts "# Tokens : #{tokens.map(&:value)}"
   puts
   tokens
 end
