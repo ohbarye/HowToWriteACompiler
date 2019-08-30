@@ -1,5 +1,6 @@
 @source = ''
 @source_index = 0
+@tokens = []
 
 Token = Struct.new(:kind, :value)
 Expr = Struct.new(:kind, :intval)
@@ -60,7 +61,7 @@ end
 
 def main
   @source = gets
-  tokens = tokenize
+  @tokens = tokenize
   first_token = tokens.first
   expr = Expr.new('intliteral', first_token.value)
 
