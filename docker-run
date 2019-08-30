@@ -1,2 +1,2 @@
 #!/bin/bash
-exec docker run --rm -it -w /mnt -v $PWD:/mnt dqneo/ubuntu-build-essential:go bash
+exec docker run --rm -it -w /mnt -v $PWD:/mnt ruby:2.6.4 bash
